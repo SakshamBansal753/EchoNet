@@ -1,0 +1,75 @@
+import React, { useEffect, useState } from 'react';
+
+const Home = () => {
+  const [Post_data, setPost_data] = useState(null);
+  const [error, seterror] = useState('');
+  const [Loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const get_post = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/getpost');
+        const data = await response.json();
+
+        const keys = Object.keys(data);
+        for (let i = keys.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [keys[i], keys[j]] = [keys[j], keys[i]];
+        }
+
+        const shuffledPosts = keys.map((key) => data[key]);
+        setPost_data(shuffledPosts);
+      } catch (e) {
+        console.error(e);
+        seterror('Failed to fetch posts');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    get_post();
+  }, []);
+
+  if (Loading) return <div className="text-center mt-20 text-lg text-gray-400">Loading posts...</div>;
+  if (error) return <div className="text-center mt-20 text-red-500">{error}</div>;
+
+  return (
+    <div className="min-h-screen bg-black py-12 px-4 sm:px-8 border-l">
+      <div className="max-w-3xl mx-auto flex flex-col gap-10">
+        {Post_data?.map((post, index) => (
+          <div
+            key={index}
+            className="bg-[#111] border border-gray-800 shadow-md rounded-2xl p-6 transition duration-300 hover:shadow-lg hover:border-gray-700"
+          >
+            <div className="flex items-center gap-4 mb-4">
+              <img
+                src={post.Profile}
+                alt="User"
+                width={50}
+                height={50}
+                className="rounded-full object-cover border border-gray-700"
+              />
+              <div>
+                <h2 className="text-lg font-semibold text-white">{post.UserName}</h2>
+                <p className="text-sm text-gray-400">{post.date} at {post.time}</p>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <img
+                src={post.image}
+                alt="Post"
+                className="w-full rounded-lg object-cover max-h-[500px] border border-gray-800"
+              />
+            </div>
+
+            <p className="text-gray-300 text-base">{post.content}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Home;

@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Manufacturing+Consent&display=swap');
+
+@import "tailwindcss";
+
+.fonticon{
+    font-family: Manufacturing Consent,sans-serif;
+}
+body{
+    background-color: black;
+    color: white;
+}
+.nav{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.profileimg{
+    border-radius: 80%;
+}
